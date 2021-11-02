@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="KafkaFlow" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.Abstractions" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.Extensions.Hosting" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.Serializer" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.Serializer.NewtonsoftJson" Version="2.1.19" />
+		<PackageReference Include="KafkaFlow.TypedHandler" Version="2.1.19" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.2.0-beta1" />
+		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-beta1" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc8" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Events\Events.csproj" />
+		<ProjectReference Include="..\OrleansOpenTelemetryShim\OrleansOpenTelemetryShim.csproj" />
+		<ProjectReference Include="..\SharedMiddleware\SharedMiddleware.csproj" />
+	</ItemGroup>
+</Project>

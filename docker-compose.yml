@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  attributesconfigservicemock:
+    image: ${DOCKER_REGISTRY-}attributesconfigservicemock
+    build:
+      context: .
+      dockerfile: AttributesConfigServiceMock/Dockerfile
+
+  ciamprovisionermock:
+    image: ${DOCKER_REGISTRY-}ciamprovisionermock
+    build:
+      context: .
+      dockerfile: CiamMock/Dockerfile
+
+
+  ciamreplicationmonitormock:
+    image: ${DOCKER_REGISTRY-}ciamreplicationmonitormock
+    build:
+      context: .
+      dockerfile: CiamReplicationMonitorMock/Dockerfile
+
+
+  ucpschemaservicemock:
+    image: ${DOCKER_REGISTRY-}ucpschemaservicemock
+    build:
+      context: .
+      dockerfile: UcpSchemaServiceMock/Dockerfile
+
+
+  viewsprovisionermock:
+    image: ${DOCKER_REGISTRY-}viewsprovisionermock
+    build:
+      context: .
+      dockerfile: ViewsProvisioner/Dockerfile
+
+
+  coordinatorapi:
+    image: ${DOCKER_REGISTRY-}coordinatorapi
+    build:
+      context: .
+      dockerfile: CoordinatorApi/Dockerfile
+
+
+networks:
+  default:
+    name: provisioner
+    attachable: true    # can attach other containers to it
+    internal: false     # visible to host
+    external: false     # created in docker compose

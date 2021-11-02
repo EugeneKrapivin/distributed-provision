@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ViewsProvisioner": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

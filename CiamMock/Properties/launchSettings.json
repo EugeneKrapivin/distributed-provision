@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CiamMock": {
+      "commandName": "Project"
+    },
+    "Docker (1)": {
+      "commandName": "Docker"
+    }
+  }
+}

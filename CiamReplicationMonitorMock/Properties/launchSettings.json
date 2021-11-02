@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CiamReplicationMonitorMock": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

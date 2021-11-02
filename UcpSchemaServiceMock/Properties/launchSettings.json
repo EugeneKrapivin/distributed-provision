@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "UcpSchemaServiceMock": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
