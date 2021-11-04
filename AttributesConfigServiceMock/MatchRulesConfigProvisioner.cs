@@ -6,12 +6,12 @@ using KafkaFlow.TypedHandler;
 
 namespace AttributesConfigServiceMock;
 
-internal class MergeRulesConfigProvisioner
+internal class MatchRulesConfigProvisioner
     : IMessageHandler<UcpSchemaCreatedEvent>
 {
     private readonly IMessageProducer _producer;
 
-    public MergeRulesConfigProvisioner(IProducerAccessor producerAccessor)
+    public MatchRulesConfigProvisioner(IProducerAccessor producerAccessor)
     {
         _producer = producerAccessor.GetProducer("producer");
     }
@@ -23,7 +23,7 @@ internal class MergeRulesConfigProvisioner
         // probably could be better handled with a mediator :)
         if (message.SchemaType == "marketing")
         {
-            foreach (var mergeRule in new[] { "email", /*"phone"*/ })
+            foreach (var mergeRule in new[] { "email", "phone" })
             {
                 await Task.Delay(TimeSpan.FromSeconds(1));
 
@@ -44,12 +44,12 @@ internal class MergeRulesConfigProvisioner
     }
 
     private async Task PublishEvent(IMessageContext context, UcpSchemaCreatedEvent message, DateTime startTime, DateTime endTime, string mergeRule)
-        => await _producer.ProduceAsync(context.Message.Key, new MergeRuleCreatedEvent(message)
-        {
-            StartTime = startTime,
-            EndTime = endTime,
-            Name = mergeRule,
-            RuleId = Guid.NewGuid().ToString(),
-            SchemaId = message.SchemaId
-        });
+    => await _producer.ProduceAsync(context.Message.Key, new MatchRuleCreatedEvent(message)
+    {
+        StartTime = startTime,
+        EndTime = endTime,
+        Name = mergeRule,
+        RuleId = Guid.NewGuid().ToString(),
+        SchemaId = message.SchemaId
+    });
 }

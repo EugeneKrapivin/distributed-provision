@@ -1,4 +1,6 @@
 ﻿
+using Events;
+
 using Orleans;
 
 using System;
@@ -12,9 +14,10 @@ public interface IProvisionStatusGrain : IGrainWithGuidKey
 
     ValueTask<ProvisionMetadata> GetStatus();
 
-    Task<ProvisionStep> StartStep(string name, DateTime? startTime = null);
+    Task<ProvisionStep> StartStep(string messageId, StepType type, DateTime? startTime = null);
 
-    Task<ProvisionStep> EndStep(string name, DateTime? endTime = null);
+    Task<ProvisionStep> EndStep(string messageId, DateTime? endTime = null);
 
-    Task<ProvisionStep> LogStep(string name, DateTime startTime, DateTime endTime);
+    Task<ProvisionStep> LogStep<T>(T step) 
+        where T : IBusinessUnitProvisionEvent;
 }

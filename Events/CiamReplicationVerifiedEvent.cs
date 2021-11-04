@@ -10,4 +10,19 @@ public class CiamReplicationVerifiedEvent : IBusinessUnitProvisionEvent
 
     public DateTime StartTime { get; init; }
     public DateTime EndTime { get; init; }
+
+    public Guid TriggerMessageId { get; init; }
+    public Guid MessageId { get; init; } = Guid.NewGuid();
+
+    public CiamReplicationVerifiedEvent()
+    {
+        TriggerMessageId = Guid.Empty;
+    }
+
+    public CiamReplicationVerifiedEvent(IBusinessUnitProvisionEvent triggerMessage)
+    {
+        TriggerMessageId = triggerMessage.MessageId;
+        CallId = triggerMessage.CallId;
+        CorrelationId = triggerMessage.CorrelationId;
+    }
 }

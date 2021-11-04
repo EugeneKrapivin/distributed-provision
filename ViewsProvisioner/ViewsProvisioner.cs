@@ -35,10 +35,8 @@ public class ViewsProvisioner :
 
         foreach (var view in _defaultViews)
         {
-            await _producer.ProduceAsync(context.Message.Key, new ViewCreatedEvent
+            await _producer.ProduceAsync(context.Message.Key, new ViewCreatedEvent(message)
             {
-                CallId = message.CallId,
-                CorrelationId = message.CorrelationId,
                 BusinessUnitId = message.BusinessUnitId,
                 ViewName = view,
                 ViewId = Guid.NewGuid().ToString(),

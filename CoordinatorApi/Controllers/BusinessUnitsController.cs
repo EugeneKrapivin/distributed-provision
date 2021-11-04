@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Orleans;
 
 using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CoordinatorApi.Controllers;
@@ -61,7 +62,9 @@ public class BusinessUnitsController : ControllerBase
 public class ProvisioningStatus
 {
     public string Id { get; init; }
-    public string Status { get; init; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public ProvisionStatus Status { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime LastUpdate { get; init; }
 }

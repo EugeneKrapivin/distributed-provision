@@ -9,11 +9,11 @@ namespace CiamProvisionerMock;
 public class CiamProvisioner :
     IMessageHandler<ProvisionRequestedEvent>
 {
-    private readonly IProducerAccessor _producerAccessor;
+    private readonly IMessageProducer _producer;
 
     public CiamProvisioner(IProducerAccessor producerAccessor)
     {
-        _producerAccessor = producerAccessor;
+        _producer = producerAccessor.GetProducer("producer");
     }
 
     public async Task Handle(IMessageContext context, ProvisionRequestedEvent message)
@@ -33,10 +33,8 @@ public class CiamProvisioner :
 
         // TODO: try catch, propage error
 
-        await _producerAccessor.GetProducer("producer").ProduceAsync(context.Message.Key, new CiamProvisionCompletedEvent
+        await _producer.ProduceAsync(context.Message.Key, new CiamProvisionCompletedEvent(message)
         {
-            CallId = message.CallId,
-            CorrelationId = message.CorrelationId,
             SiteId = siteId,
             BusinessUnitId = apiKey,
             StartTime = startTime,

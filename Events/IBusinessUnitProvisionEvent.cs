@@ -4,7 +4,8 @@ namespace Events;
 
 public interface IBusinessUnitProvisionEvent
 {
-    public Guid MessageId => Guid.NewGuid();
+    public Guid TriggerMessageId { get; init; }
+    public Guid MessageId { get; }
     public DateTime CreatedAt => DateTime.UtcNow;
 
     public string CallId { get; init; }

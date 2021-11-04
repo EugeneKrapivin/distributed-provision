@@ -8,11 +8,11 @@ namespace CiamReplicationMonitorMock;
 public class CiamReplicationValidator :
     IMessageHandler<CiamProvisionCompletedEvent>
 {
-    private readonly IProducerAccessor _producerAccessor;
+    private readonly IMessageProducer _producer;
 
     public CiamReplicationValidator(IProducerAccessor producerAccessor)
     {
-        _producerAccessor = producerAccessor;
+        _producer = producerAccessor.GetProducer("producer");
     }
 
     public async Task Handle(IMessageContext context, CiamProvisionCompletedEvent message)
@@ -23,10 +23,8 @@ public class CiamReplicationValidator :
 
         var endTime = DateTime.UtcNow;
 
-        await _producerAccessor.GetProducer("producer").ProduceAsync(context.Message.Key, new CiamReplicationVerifiedEvent
+        await _producer.ProduceAsync(context.Message.Key, new CiamReplicationVerifiedEvent(message)
         {
-            CallId = message.CallId,
-            CorrelationId = message.CorrelationId,
             BusinessUnitId = message.BusinessUnitId,
             StartTime = startTime,
             EndTime = endTime

@@ -46,7 +46,7 @@ public class BusinessUnitProvisioningOrchestrator :
             name,
             datacenter);
 
-        var ev = new ProvisionRequestedEvent
+        IBusinessUnitProvisionEvent ev = new ProvisionRequestedEvent
         {
             CorrelationId = correlationId,
             Name = name,
@@ -57,8 +57,8 @@ public class BusinessUnitProvisioningOrchestrator :
         var response = await _client.GetGrain<IProvisionStatusGrain>(correlationId)
             .Provision(name, null, datacenter);
 
-        await _client.GetGrain<IProvisionStatusGrain>(correlationId)
-            .StartStep("ciam provision");
+        await _client.GetGrain<IProvisionStatusGrain>(ev.CorrelationId)
+            .StartStep(ev.MessageId.ToString(), StepType.CiamProvisioned, ev.StartTime);
 
         await _producer.ProduceAsync(correlationId.ToString(), ev);
 
@@ -68,7 +68,7 @@ public class BusinessUnitProvisioningOrchestrator :
     public async Task Handle(IMessageContext context, CiamProvisionCompletedEvent message)
     {
         await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-            .EndStep("ciam provision");
+            .EndStep(message.TriggerMessageId.ToString(), message.EndTime);
 
         var startTime = DateTime.UtcNow;
 
@@ -76,46 +76,48 @@ public class BusinessUnitProvisioningOrchestrator :
 
         var endTime = DateTime.UtcNow;
 
-        await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-                        .LogStep("business unit store", startTime, endTime);
-
-        await _producer.ProduceAsync(context.Message.Key, new BusinessUnitStoredEvent
+        var ev = new BusinessUnitStoredEvent
         {
             BusinessUnitId = message.BusinessUnitId,
             CorrelationId = message.CorrelationId,
             CallId = message.CallId,
             StartTime = startTime,
             EndTime = endTime
-        });
+        };
+
+        await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
+                        .LogStep(ev);
+
+        await _producer.ProduceAsync(context.Message.Key, ev);
     }
 
     public async Task Handle(IMessageContext context, CiamReplicationVerifiedEvent message)
     {
         await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-           .LogStep("ciam replication verifivation", message.StartTime, message.EndTime);
+           .LogStep(message);
     }
 
     public async Task Handle(IMessageContext context, MergeRuleCreatedEvent message)
     {
         await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-            .LogStep("create default merge rule", message.StartTime, message.EndTime);
+            .LogStep(message);
     }
 
     public async Task Handle(IMessageContext context, MatchRuleCreatedEvent message)
     {
         await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-            .LogStep("create default match rule", message.StartTime, message.EndTime);
+            .LogStep(message);
     }
 
     public async Task Handle(IMessageContext context, UcpSchemaCreatedEvent message)
     {
         await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-            .LogStep("create default ucp schema", message.StartTime, message.EndTime);
+            .LogStep(message);
     }
 
     public async Task Handle(IMessageContext context, ViewCreatedEvent message)
     {
         await _client.GetGrain<IProvisionStatusGrain>(message.CorrelationId)
-            .LogStep("create default view", message.StartTime, message.EndTime);
+            .LogStep(message);
     }
 }
